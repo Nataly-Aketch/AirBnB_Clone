@@ -19,15 +19,15 @@ This is a command line interphase that works quite like the shell except it's a 
 
 `(hbnb) help`
 
-Documented commands (type help <topic>):
+`Documented commands (type help <topic>):`
 
-========================================
+`========================================`
 
-EOF  help  quit
+`EOF  help  quit`
 
 `(hbnb) help quit`
 
-quits the interpreter
+`quits the interpreter`
 
 `(hbnb)`
 
