@@ -21,10 +21,8 @@ class BaseModel():
 
     def __str__(self):
         """prints informal string representation of the class"""
-        dict1 = {'id': self.id, 'created_at': self.created_at,
-                 'updated_at': self.updated_at}
-        dict1.update(**self.__dict__)
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, dict1)
+        return "[{}] ({}) {}".format(type(self).__name__, self.id,
+                                     self.__dict__)
 
     def save(self):
         """updates the instance attribute with current datetime"""
@@ -37,4 +35,3 @@ class BaseModel():
                  type(self).__name__}
         dict1.update(**self.__dict__)
         return dict1
-
