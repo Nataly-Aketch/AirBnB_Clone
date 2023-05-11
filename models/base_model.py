@@ -18,7 +18,9 @@ class BaseModel():
                 if hasattr(self, k):
                     v = getattr(self, k)
                 else:
-                    v = setattr(self, k, v)
+                    setattr(self, k, v)
+        else:
+            storage.new(self)
 
     def __str__(self):
         """prints informal string representation of the class"""
@@ -33,8 +35,9 @@ class BaseModel():
 
     def to_dict(self):
         """returns dict representation of the instance"""
-        dict1 = {'id': self.id, 'created_at': self.created_at.isoformat(),
+        dict1 = self.__dict__.copy()
+        dict2 = {'id': self.id, 'created_at': self.created_at.isoformat(),
                  'updated_at': self.updated_at.isoformat(), '__class__':
                  type(self).__name__}
-        dict1.update(**self.__dict__)
+        dict1.update(dict2)
         return dict1
