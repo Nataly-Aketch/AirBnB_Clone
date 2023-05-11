@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """defines FileStorage class"""
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -26,11 +27,12 @@ class FileStorage():
     def reload(self):
         """Reload JSON objects in file to Python objects"""
         try:
-            with open(FileStorage.__file_path, "r") as f:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 obj_dict = json.load(f)
+                loaded_objects = {}
                 for k, v in obj_dict.items():
-                    cls_name = v['__class__']
-                    new_dict[k] = eval(cls_name)(**v)
-                FileStorage.__objects = new_dict
-        except Exception:
+                    cls_name = globals()[v['__class__']]
+                    loaded_objects[k] = cls_name(**v)
+                FileStorage.__objects = loaded_objects
+        except Exception as e:
             pass
