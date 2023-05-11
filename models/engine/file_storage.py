@@ -27,9 +27,10 @@ class FileStorage():
         """Reload JSON objects in file to Python objects"""
         try:
             with open(FileStorage.__file_path, "r") as f:
-                obj_dict = load(f)
+                obj_dict = json.load(f)
                 for k, v in obj_dict.items():
                     cls_name = v['__class__']
-                    obj_dict[k] = cls_name(**v)
-        except Exception as e:
+                    new_dict[k] = eval(cls_name)(**v)
+                FileStorage.__objects = new_dict
+        except Exception:
             pass
