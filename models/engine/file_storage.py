@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """defines FileStorage class"""
-import json, os
+import json
 from models.base_model import BaseModel
 
 
@@ -11,7 +11,6 @@ class FileStorage():
 
     def all(self):
         """All Objects"""
-        self.reload()
         return FileStorage.__objects
 
     def new(self, obj):
@@ -21,8 +20,8 @@ class FileStorage():
 
     def save(self):
         """Save an object to the file"""
+        dictionary = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
-            dictionary = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             json.dump(dictionary, f)
 
     def reload(self):
@@ -30,7 +29,6 @@ class FileStorage():
         try:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 obj_dict = json.load(f)
-                print(obj_dict)
                 loaded_objects = {}
                 for k, v in obj_dict.items():
                     cls_name = globals()[v['__class__']]
