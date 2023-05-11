@@ -36,5 +36,5 @@ class FileStorage():
                     cls_name = globals()[v['__class__']]
                     loaded_objects[k] = cls_name(**v)
                 FileStorage.__objects = loaded_objects
-        except Exception:
+        except Exception as e:
             pass
