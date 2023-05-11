@@ -1,4 +1,7 @@
+#!/usr/bin/python3
+"""defines FileStorage class"""
 import json
+
 
 class FileStorage():
     """FileStorage Class"""
@@ -16,13 +19,17 @@ class FileStorage():
 
     def save(self):
         """Save an object to the file"""
+        dictionary = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
-            dictionary = {k: v.to_dict() for k,v in FileStorage.__objects.items()}
             json.dump(dictionary, f)
-    
+
     def reload(self):
         """Reload JSON objects in file to Python objects"""
-        if not os.path.isfile(FileStorage.__file_path):
-            return
-        with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
-            obj_dict = json.load(f)
+        try:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+                obj_dict = json.load(f)
+                for k, v in obj_dict.items():
+                    cls_name = v['__class__']
+                    self.new(eval(cls_name)(**v))
+        except Exception as e:
+            pass
