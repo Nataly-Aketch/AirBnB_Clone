@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """this program contains the entry point of the command interpreter"""
 import cmd
-import re
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -34,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
         elif line not in self.cls_list:
             print("** class doesn't exist **")
         else:
-            new = BaseModel()
+            new = globals()[line]()
             print(new.id)
             new.save()
 
@@ -93,25 +92,35 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, line):
         """Updates an instance based on the class name and id by adding or updating attribute"""
         input = line.split()
-        if len(input) < 4:
+        if len(input) > 4:
             print("update <class name> <id> <attribute name> \"<attribute value>\"")
         else:
-            if len(input) > 4:
-                print("Only one attribute can be updated at a time")
-            key = "{}.{}".format(input[0], input[1])
-            if hasattr(storage.all()[key], input[2]):
-                cast = type(getattr(storage.all()[key], input[2]))
-                value = cast(input[3])
+            if len(input) == 0:
+                print("** class name missing **")
+            elif input[0] not in self.cls_list:
+                print("** class doesn't exist **")
+            elif len(input) < 2:
+                print("** instance id missing **")
+            else:
+                key = "{}.{}".format(input[0], input[1])
+                if key not in storage.all():
+                    print("** no instance found **")
+                elif len(input) < 3:
+                    print("** attribute name missing **")
+                elif len(input) < 4:
+                    print("** value missing **")
+                else:
+                    non_updatable_attributes = ["id", "created_at", "updated_at"]
+                    if hasattr(storage.all()[key], input[2]) and input[2] not in non_updatable_attributes:
+                        cast = type(getattr(storage.all()[key], input[2]))
+                        value = cast(input[3])
+                        print(type(value))
+                        setattr(storage.all()[key], input[2], value)
+                        storage.save()
+                    elif input[2] not in non_updatable_attributes:
+                        setattr(storage.all()[key], input[2], input[3].strip('"').strip("'").replace("'", '"'))
+                        storage.save()
+
                 
-
-
-
-
-
-
-            
-            
-
-
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
