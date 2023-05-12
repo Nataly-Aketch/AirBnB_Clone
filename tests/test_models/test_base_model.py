@@ -28,6 +28,10 @@ class TestInstantation(unittest.TestCase):
         my_model = BaseModel()
         self.assertNotEqual(my_model.created_at, datetime.now())
 
+    def test_datetime_type(self):
+        my_model = BaseModel()
+        self.assertEqual(type(my_model.created_at), datetime)
+
     def test_kwargs(self):
         my_model = BaseModel(name="first")
         self.assertTrue(hasattr(my_model, 'name'))
@@ -39,6 +43,11 @@ class TestMethods(unittest.TestCase):
         my_model = BaseModel()
         my_model_dict = my_model.to_dict()
         self.assertEqual(type(my_model_dict), dict)
+
+    def test_dict_datetime_type(self):
+        my_model = BaseModel()
+        new_dict = my_model.to_dict()
+        self.assertEqual(type(new_dict.get('created_at')), str)
 
     def test_save(self):
         """Tests the save() method"""
