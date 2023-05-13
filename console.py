@@ -14,7 +14,7 @@ from models import storage
 class HBNBCommand(cmd.Cmd):
     """command processor"""
     prompt = '(hbnb) '
-    cls_list = ['BaseModel', 'State', 'City', 'User'
+    cls_list = ['BaseModel', 'State', 'City', 'User',
                'Place', 'Amenity', 'Review']
 
     def do_EOF(self, line):
@@ -26,14 +26,21 @@ class HBNBCommand(cmd.Cmd):
         exit()
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it (to the JSON file)
+        """Creates a new instance of a class, saves it (to the JSON file)
         and prints the id"""
         if not line:
             print("** class name missing **")
         elif line not in self.cls_list:
             print("** class doesn't exist **")
         else:
+<<<<<<< Updated upstream
             new = globals()[line]()
+=======
+            if line == 'BaseModel':
+                new = BaseModel()
+            elif line == 'User':
+                new = User()
+>>>>>>> Stashed changes
             print(new.id)
             new.save()
 
@@ -41,10 +48,12 @@ class HBNBCommand(cmd.Cmd):
         """Prints the string representation of an instance based
         on the class name and id"""
         new_line = line.split()
-        if not line:
+        new_inst = BaseModel()
+        if not new_line[0]:
             print("** class name missing **")
         elif new_line[0] not in self.cls_list:
             print("** class doesn't exist **")
+<<<<<<< Updated upstream
         elif len(new_line) < 2:
             print("** instance id missing **")
         else:
@@ -88,6 +97,12 @@ class HBNBCommand(cmd.Cmd):
             for key, value in storage.all().items():
                 obj_list.append(str(value))
             print(obj_list)
+=======
+        elif not new_line[1]:
+            print("** instance id missing **")
+        elif new_line[1] != new_inst.id:
+            print("** no instance found **")
+>>>>>>> Stashed changes
 
     def do_update(self, line):
         """Updates an instance based on the class name and id by adding or updating attribute"""
