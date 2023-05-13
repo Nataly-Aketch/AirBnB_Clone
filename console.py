@@ -15,7 +15,7 @@ class HBNBCommand(cmd.Cmd):
     """command processor"""
     prompt = '(hbnb) '
     cls_list = ['BaseModel', 'State', 'City', 'User',
-               'Place', 'Amenity', 'Review']
+                'Place', 'Amenity', 'Review']
 
     def do_EOF(self, line):
         """End of File to exit the program"""
@@ -33,14 +33,7 @@ class HBNBCommand(cmd.Cmd):
         elif line not in self.cls_list:
             print("** class doesn't exist **")
         else:
-<<<<<<< Updated upstream
             new = globals()[line]()
-=======
-            if line == 'BaseModel':
-                new = BaseModel()
-            elif line == 'User':
-                new = User()
->>>>>>> Stashed changes
             print(new.id)
             new.save()
 
@@ -51,9 +44,6 @@ class HBNBCommand(cmd.Cmd):
         new_inst = BaseModel()
         if not new_line[0]:
             print("** class name missing **")
-        elif new_line[0] not in self.cls_list:
-            print("** class doesn't exist **")
-<<<<<<< Updated upstream
         elif len(new_line) < 2:
             print("** instance id missing **")
         else:
@@ -62,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 print(storage.all()[key])
-    
+
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id"""
         input = line.split()
@@ -80,9 +70,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     del storage.all()[key]
                     storage.save()
-    
+
     def do_all(self, line):
-        """Prints all string representation of all instances based or not in the class name"""
+        """Prints all string representation of all instances
+        based or not in the class name"""
         obj_list = []
         if line != "":
             input = line.split()
@@ -97,18 +88,16 @@ class HBNBCommand(cmd.Cmd):
             for key, value in storage.all().items():
                 obj_list.append(str(value))
             print(obj_list)
-=======
-        elif not new_line[1]:
-            print("** instance id missing **")
-        elif new_line[1] != new_inst.id:
-            print("** no instance found **")
->>>>>>> Stashed changes
 
     def do_update(self, line):
-        """Updates an instance based on the class name and id by adding or updating attribute"""
+        """Updates an instance based on the class name and
+        id by adding or updating attribute"""
         input = line.split()
         if len(input) > 4:
-            print("update <class name> <id> <attribute name> \"<attribute value>\"")
+            cls = "class name"
+            attr = "attribute name"
+            print("update <{}> <id> <{}> \"<attribute value>\""
+                  .format(cls, attr))
         else:
             if len(input) == 0:
                 print("** class name missing **")
@@ -125,17 +114,21 @@ class HBNBCommand(cmd.Cmd):
                 elif len(input) < 4:
                     print("** value missing **")
                 else:
-                    non_updatable_attributes = ["id", "created_at", "updated_at"]
-                    if hasattr(storage.all()[key], input[2]) and input[2] not in non_updatable_attributes:
+                    non_updatable_attributes = ["id", "created_at",
+                                                "updated_at"]
+                    if hasattr(storage.all()[key], input[2]) \
+                            and input[2] not in non_updatable_attributes:
                         cast = type(getattr(storage.all()[key], input[2]))
                         value = cast(input[3])
                         print(type(value))
                         setattr(storage.all()[key], input[2], value)
                         storage.save()
                     elif input[2] not in non_updatable_attributes:
-                        setattr(storage.all()[key], input[2], input[3].strip('"').strip("'").replace("'", '"'))
+                        setattr(storage.all()[key], input[2],
+                                input[3].strip('"').strip("'")
+                                .replace("'", '"'))
                         storage.save()
 
-                
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
