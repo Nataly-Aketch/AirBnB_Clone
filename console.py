@@ -14,8 +14,8 @@ from models import storage
 class HBNBCommand(cmd.Cmd):
     """command processor"""
     prompt = '(hbnb) '
-    cls_list = ['BaseModel', 'State', 'City', 'User'
-               'Place', 'Amenity', 'Review']
+    cls_list = ['BaseModel', 'State', 'City', 'User',
+                'Place', 'Amenity', 'Review']
 
     def do_EOF(self, line):
         """End of File to exit the program"""
@@ -26,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
         exit()
 
     def do_create(self, line):
-        """Creates a new instance of BaseModel, saves it (to the JSON file)
+        """Creates a new instance of a class, saves it (to the JSON file)
         and prints the id"""
         if not line:
             print("** class name missing **")
@@ -41,10 +41,9 @@ class HBNBCommand(cmd.Cmd):
         """Prints the string representation of an instance based
         on the class name and id"""
         new_line = line.split()
-        if not line:
+        new_inst = BaseModel()
+        if not new_line[0]:
             print("** class name missing **")
-        elif new_line[0] not in self.cls_list:
-            print("** class doesn't exist **")
         elif len(new_line) < 2:
             print("** instance id missing **")
         else:
@@ -53,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 print(storage.all()[key])
-    
+
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id"""
         input = line.split()
@@ -71,9 +70,10 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     del storage.all()[key]
                     storage.save()
-    
+
     def do_all(self, line):
-        """Prints all string representation of all instances based or not in the class name"""
+        """Prints all string representation of all instances
+        based or not in the class name"""
         obj_list = []
         if line != "":
             input = line.split()
@@ -90,10 +90,14 @@ class HBNBCommand(cmd.Cmd):
             print(obj_list)
 
     def do_update(self, line):
-        """Updates an instance based on the class name and id by adding or updating attribute"""
+        """Updates an instance based on the class name and
+        id by adding or updating attribute"""
         input = line.split()
         if len(input) > 4:
-            print("update <class name> <id> <attribute name> \"<attribute value>\"")
+            cls = "class name"
+            attr = "attribute name"
+            print("update <{}> <id> <{}> \"<attribute value>\""
+                  .format(cls, attr))
         else:
             if len(input) == 0:
                 print("** class name missing **")
@@ -110,17 +114,21 @@ class HBNBCommand(cmd.Cmd):
                 elif len(input) < 4:
                     print("** value missing **")
                 else:
-                    non_updatable_attributes = ["id", "created_at", "updated_at"]
-                    if hasattr(storage.all()[key], input[2]) and input[2] not in non_updatable_attributes:
+                    non_updatable_attributes = ["id", "created_at",
+                                                "updated_at"]
+                    if hasattr(storage.all()[key], input[2]) \
+                            and input[2] not in non_updatable_attributes:
                         cast = type(getattr(storage.all()[key], input[2]))
                         value = cast(input[3])
                         print(type(value))
                         setattr(storage.all()[key], input[2], value)
                         storage.save()
                     elif input[2] not in non_updatable_attributes:
-                        setattr(storage.all()[key], input[2], input[3].strip('"').strip("'").replace("'", '"'))
+                        setattr(storage.all()[key], input[2],
+                                input[3].strip('"').strip("'")
+                                .replace("'", '"'))
                         storage.save()
 
-                
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

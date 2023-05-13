@@ -5,9 +5,9 @@ from models.base_model import BaseModel
 
 class Place(BaseModel):
     """Inherits from BaseModel"""
-    city_id: string = ""
-    user_id: string = ""
-    name: string = ""
+    city_id = ""
+    user_id = ""
+    name = ""
     description = ""
     number_rooms = 0
     number_bathrooms = 0
