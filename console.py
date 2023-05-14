@@ -19,12 +19,16 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, line):
         """End of File to exit the program"""
-        print("")
+        print()
         return True
 
     def do_quit(self, line):
         """Quit command to exit the program"""
         return True
+
+    def emptyline(self):
+        """does nothing"""
+        pass
 
     def do_create(self, line):
         """Creates a new instance of a class, saves it (to the JSON file)
