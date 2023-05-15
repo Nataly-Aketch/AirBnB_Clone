@@ -15,11 +15,12 @@ class BaseModel():
         self.updated_at = datetime.now()
         storage.new(self)
         if len(kwargs) != 0:
+            d = '%Y-%m-%dT%H:%M:%S.%f'
             for k, v in kwargs.items():
-                if hasattr(self, k):
-                    v = getattr(self, k)
-                elif k != '__class__':
-                    setattr(self, k, v)
+                if k == 'created_at' or k == 'updated_at':
+                    self.__dict__[k] = datetime.strptime(v, d)
+                else:
+                    self.__dict__[k] = v
 
     def __str__(self):
         """prints informal string representation of the class"""
