@@ -47,10 +47,12 @@ class HBNBCommand(cmd.Cmd):
         on the class name and id"""
         new_line = line.split()
         new_inst = BaseModel()
-        if not new_line[0]:
+        if not new_line:
             print("** class name missing **")
         elif len(new_line) < 2:
             print("** instance id missing **")
+        elif new_line[0] not in self.cls_list:
+            print("** class doesn't exist **")
         else:
             key = "{}.{}".format(new_line[0], new_line[1])
             if key not in storage.all():
