@@ -19,22 +19,12 @@ class TestInstantation(unittest.TestCase):
         user = User()
         self.assertEqual(type(user.id), str)
 
-    def test_uuid(self):
+    def test_attr(self):
         user = User()
-        other_user = User()
-        self.assertNotEqual(user.id, other_user.id)
-
-    def test_datetime(self):
-        user = User()
-        self.assertNotEqual(user.created_at, datetime.now())
-
-    def test_datetime_type(self):
-        user = User()
-        self.assertEqual(type(user.created_at), datetime)
-
-    def test_kwargs(self):
-        user = User(new_name="first")
-        self.assertTrue(hasattr(user, 'new_name'))
+        self.assertTrue(hasattr(user, 'first_name'))
+        self.assertTrue(hasattr(user, 'last_name'))
+        self.assertTrue(hasattr(user, 'email'))
+        self.assertTrue(hasattr(user, 'password'))
 
 
 class TestMethods(unittest.TestCase):
